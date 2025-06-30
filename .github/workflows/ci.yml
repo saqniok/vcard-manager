@@ -13,18 +13,18 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v3
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 8.0.x 
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore VCardManager.sln
 
-    - name: Build
-      run: dotnet build --no-restore
+    - name: Build solution
+      run: dotnet build VCardManager.sln --no-restore --configuration Release
 
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Run tests
+      run: dotnet test VCardManager.Tests/VCardManager.Tests.csproj --no-build --configuration Release --logger trx
