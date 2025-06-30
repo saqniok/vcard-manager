@@ -1,6 +1,5 @@
-namespace VCardManager.CLI
+namespace VCardManager.Core
 {
-    using VCardManager.Core;
 
     public class Facade : IFacade
     {

@@ -1,4 +1,6 @@
-namespace VCardManager.Core
+using VCardManager.Core;
+
+namespace VCardManager.CLI
 {
     public class FileSystemStore : IFileStore
     {

@@ -1,7 +1,4 @@
-using System;
-using VCardManager.Core;
-
-namespace VCardManager.CLI
+namespace VCardManager.Core
 {
     public class Menu
     {
