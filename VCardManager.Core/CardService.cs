@@ -40,7 +40,7 @@ namespace VCardManager.Core
                                                                                         // and then overwriting the entire file. For small collections of VCards, this is acceptable
         }
 
-        public void exportCard(Guid id)
+        public void exportCard(Guid id)                                                // TODO:
         {
             var card = GetVCard(id);
             if (card == null) return;

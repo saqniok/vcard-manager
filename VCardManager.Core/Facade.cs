@@ -1,7 +1,7 @@
 namespace VCardManager.Core
 {
 
-    public class Facade : IFacade
+    public class Facade : IFacade                                   // TODO:
     {
         private readonly ICardService _cardService;
         private readonly IConsole _console;

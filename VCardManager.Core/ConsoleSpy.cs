@@ -2,7 +2,7 @@ using VCardManager.Core;
 
 namespace VCardManager.Tests;
 
-public class ConsoleSpy : IConsole
+public class ConsoleSpy : IConsole                                          // TODO:
 {
     private readonly Queue<string> inputs = new();
     public List<string> Output = new();
