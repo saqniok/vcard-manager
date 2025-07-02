@@ -118,4 +118,24 @@ public class CardServiceTest
         var allCards = _cardService.getAllCards().ToList();
         Assert.Equal(2, allCards.Count);
     }
+
+    [Fact]
+    public void FindByName_ShoulBeReturnMatchingCards()
+    {
+        var card1 = new VCard { Id = Guid.NewGuid(), FullName = "Balck", PhoneNumber = "25", Email = "black@example.com" };
+        var card2 = new VCard { Id = Guid.NewGuid(), FullName = "Dick", PhoneNumber = "00", Email = "dick@example.com" };
+        var card3 = new VCard { Id = Guid.NewGuid(), FullName = "Dickenson", PhoneNumber = "25", Email = "valey@example.com" };
+
+        _cardService.addCard(card1);
+        _cardService.addCard(card2);
+        _cardService.addCard(card3);
+
+        var foundCards = _cardService.FindByName("dick").ToList();
+
+        Assert.NotNull(foundCards);
+        Assert.Equal(2, foundCards.Count);
+        Assert.Contains(foundCards, c => c.Id == card2.Id);
+        Assert.Contains(foundCards, c => c.Id == card3.Id);
+        Assert.DoesNotContain(foundCards, c => c.Id == card1.Id);
+    }
 }
