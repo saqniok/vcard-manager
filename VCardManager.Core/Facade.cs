@@ -1,3 +1,5 @@
+using System.Reflection.Metadata.Ecma335;
+
 namespace VCardManager.Core
 {
 
@@ -57,12 +59,7 @@ namespace VCardManager.Core
 
         private bool isCardExist(VCard card)
         {
-            if (card == null)
-            {
-                _console.WriteLine("Card is not exist.");
-                return false;
-            }
-            return true;
+            return card != null;
         }
 
         public void AddVCard()
