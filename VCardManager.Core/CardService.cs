@@ -67,8 +67,9 @@ namespace VCardManager.Core
             if (!_fileStore.Exist(_filePath)) return new List<VCard>();             // Checks if the `_filePath` file exists. If not, returns an empty VCard list, 
                                                                                     // preventing read errors
 
-            var allLines = File.ReadAllLines(_filePath);                            // Reads all lines from the _filePath file into an array of strings
-                                                                                    // return: A string array containing all lines of the file
+            var allLines = _fileStore.ReadAllText(_filePath)                            // Reads all lines from the _filePath file into an array of strings
+                  .Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.None);        // return: A string array containing all lines of the file
+                  
             // Two lists are initialized: 
             var cards = new List<VCard>();              // `cards` for storing parsed VCard objects and `chunk` for temporarily storing 
             var chunk = new List<string>();             // strings belonging to one VCard block (between “BEGIN:VCARD” and “END:VCARD”)
