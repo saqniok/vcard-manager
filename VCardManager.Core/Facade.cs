@@ -1,5 +1,3 @@
-using System.Reflection.Metadata.Ecma335;
-
 namespace VCardManager.Core
 {
 
@@ -8,43 +6,54 @@ namespace VCardManager.Core
         private readonly ICardService _cardService;
         private readonly IConsole _console;
 
-        public Facade(ICardService cardService, IConsole console)
+        // Constructor
+
+        // Facade (type param, type param)
+        public Facade(ICardService cardService, IConsole console)       // Its job is to initialize a new Facade instance and set its initial state
         {
-            _cardService = cardService;
-            _console = console;
+            _cardService = cardService;                                 // Assigns the value obtained via the `cardService` parameter to the `_cardService` private field
+            _console = console;                                         // Similarly, assigns the passed IConsole instance to the _console private field
         }
 
         public VCard SelectCardByName(string prompt)
         {
-            _console.Write(prompt);
-            var name = _console.ReadLine();
-            var cards = _cardService.FindByName(name).ToList();
+            _console.Write(prompt);                                     // This is the message that will be shown to the user before requesting input
+            var name = _console.ReadLine();                             // Calls the `ReadLine` method on the `_console` object, which reads a string of text entered by the user from the console
+            var cards = _cardService.FindByName(name).ToList();         // Search for VCards containing the specified name and returns them as IEnumerable<VCard>
 
-            if (!cards.Any())
+            /*
+                .ToList(): 
+                    LINQ extension method. It converts an IEnumerable<VCard> to a List<VCard>. 
+                    This is necessary because List<T> provides properties such as Count (number of elements) and
+                    the ability to access elements by index (cards[i]), which is useful for further logic
+            */
+
+            if (!cards.Any())                               // .Any() Determines whether any element of a sequence satisfies a condition. 
             {
-                _console.WriteLine("Card not found. ");
+                _console.WriteLine("Card not found. ");     
                 return null;
             }
+            
+            // Not sure why, I gues there is another way to do
+            if (cards.Count == 1)                           // .Count is a property of the List<VCard> object, which returns the number of items in the list
+                return cards[0];                            // If we have only 1 card, it's return that array with 1 index
 
-            if (cards.Count == 1)
-            {
-                return cards[0];
-            }
+            _console.WriteLine("Find more Cards: ");        // if Count > 1 we will recieve message, that it found more Cards
 
-            _console.WriteLine("Find more Cards: ");
+            // For loop for writing cards with the same names to the console
             for (int i = 0; i < cards.Count; i++)
-            {
-                _console.WriteLine($"{i + 1}. {cards[i].FullName}");
-            }
+                _console.WriteLine($"{i + 1}. {cards[i].FullName}, TEL: {cards[i].PhoneNumber}, EMAIL: {cards[i].Email}, ID: {cards[i].Id}");
 
+            // New user menu, to choose which card to select
             _console.Write("Add Card number: ");
-            if (int.TryParse(_console.ReadLine(), out int index)
-                && index >= 1 && index <= cards.Count)
-            {
+
+            if (int.TryParse(_console.ReadLine(), out int index)            // This is a safe way to convert a string to an integer
+                && index >= 1 && index <= cards.Count)                      // If the conversion is successful, the resulting integer is stored
+            {                                                               // in a new variable `index`
                 return cards[index - 1];
             }
 
-            _console.WriteLine("Wrong number. ");
+            _console.WriteLine("Wrong number. ");                           // If the number entered is incorrect (not a number or out of range), an error message is displayed
             return null;
         }
 
@@ -73,14 +82,14 @@ namespace VCardManager.Core
             _console.WriteLine("Add email: ");
             var email = _console.ReadLine();
 
-            var card = new VCard
+            var card = new VCard                                    // A new instance of VCard class is created
             {
-                FullName = name,
+                FullName = name,                                    // The FullName property of the `card` object is assigned the value entered by the user and stored in the name variable
                 PhoneNumber = phone,
                 Email = email
             };
             _cardService.addCard(card);
-            _console.WriteLine($"Card is added. Id: {card.Id}");
+            _console.WriteLine($"Card is added. Id: {card.Id}");    
         }
 
         public void DeleteCard()
