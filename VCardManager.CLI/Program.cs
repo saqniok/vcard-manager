@@ -12,7 +12,8 @@ class Program
 {
   static void Main(string[] args)
   {
-    ICardService cardService = new CardService();
+    IFileStore fileStore = new FileSystemStore();
+    ICardService cardService = new CardService(fileStore);
     IConsole console = new SystemConsole();
     IFacade facade = new Facade(cardService, console);
 

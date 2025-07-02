@@ -10,13 +10,20 @@ namespace VCardManager.Core
                                                                                         //  in the class constructor. It cannot be changed after that. 
                                                                                         //  This ensures that the path to the file remains constant
 
+        private readonly IFileStore _fileStore;
+
+        public CardService(IFileStore fileStore)
+        {
+            _fileStore = fileStore ?? throw new ArgumentNullException(nameof(fileStore));
+        }
+
         public void addCard(VCard card)                                                 // This method adds a new VCard to the repository
         {
             if (card == null) throw new ArgumentNullException(nameof(card));            // `ArgumentNullException`, which prevents potential errors and indicates incorrect use of
                                                                                         //  the method. nameof(card) returns the name of the parameter as a string
 
-            File.AppendAllText(_filePath, card.ToString() + Environment.NewLine);       // is used to add text to the end of the file specified in _filePath
-                                                                                        // `Environment.NewLine` adds a line break so that each VCard starts on a new line in the file
+            _fileStore.AppendAllText(_filePath, card.ToString() + Environment.NewLine);         // is used to add text to the end of the file specified in _filePath
+                                                                                                // `Environment.NewLine` adds a line break so that each VCard starts on a new line in the file
         }
 
         public void deleteCard(Guid id)
@@ -34,29 +41,30 @@ namespace VCardManager.Core
             var newContent = string.Join(Environment.NewLine, cards.Select(c => c.ToString()));     // All remaining VCards in the card list are converted to
                                                                                                     // their string representation again (c.ToString())
 
-            File.WriteAllText(_filePath, newContent + Environment.NewLine);             // The entire `_filePath` file is overwritten with the `newContent`. 
+            _fileStore.WriteAllText(_filePath, newContent + Environment.NewLine);       // The entire `_filePath` file is overwritten with the `newContent`. 
                                                                                         // This is not the most efficient method of deletion for very large files, 
                                                                                         // as it requires reading the entire file into memory, deleting one item, 
                                                                                         // and then overwriting the entire file. For small collections of VCards, this is acceptable
         }
 
-        public void exportCard(Guid id)                                                // TODO:
+        public void exportCard(Guid id)                                                // standart
         {
             var card = GetVCard(id);
             if (card == null) return;
 
-            var fileName = $"export_{card.FullName.Replace(" ", "_")}.vcf";
-            File.WriteAllText(fileName, card.ToString());
+            var fileName = $"export_{card.FullName.Replace(" ", "_")}.vcf";            // make file by name: export_Name_Surname.vcf
+            _fileStore.WriteAllText(fileName, card.ToString());                        // becuase there is no file, it's create and write card in new emty file.       
         }
 
         public VCard GetVCard(Guid id)
         {
-            return getAllCards().FirstOrDefault(c => c.Id == id);
+            return getAllCards().FirstOrDefault(c => c.Id == id);                   // for small applications or contact files, the current implementation is
+                                                                                    //  quite simple, clear and sufficient
         }
 
         public IEnumerable<VCard> getAllCards()                                     // This method is the central method for reading all VCards from a file
         {
-            if (!File.Exists(_filePath)) return new List<VCard>();                  // Checks if the `_filePath` file exists. If not, returns an empty VCard list, 
+            if (!_fileStore.Exist(_filePath)) return new List<VCard>();             // Checks if the `_filePath` file exists. If not, returns an empty VCard list, 
                                                                                     // preventing read errors
 
             var allLines = File.ReadAllLines(_filePath);                            // Reads all lines from the _filePath file into an array of strings
