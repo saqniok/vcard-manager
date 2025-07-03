@@ -13,9 +13,11 @@ class Program
   static void Main(string[] args)
   {
     IFileStore fileStore = new FileSystemStore();
-    ICardService cardService = new CardService(fileStore);
+    CardProperty cardProperty = new CardProperty();
+    ICardService cardService = new CardService(fileStore, cardProperty);
     IConsole console = new SystemConsole();
-    IFacade facade = new Facade(cardService, console);
+    IUserInteraction userInteraction = new UserInteraction(console);
+    IFacade facade = new Facade(cardService, console, userInteraction);
 
     var menu = new Menu(facade, console);
     menu.Run();

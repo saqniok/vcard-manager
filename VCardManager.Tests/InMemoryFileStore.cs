@@ -28,6 +28,8 @@ namespace VCardManager.Tests
             if (_store.ContainsKey(path)) _store[path] += contents;     // If the “file” already exists, the new contents are concatenated to the current contents
             else _store[path] = contents;                               // If the “file” does not exist, it is “created” with the contents as its initial content
         }
+
+        public string[] ReadAllLines(string path) => _store.TryGetValue(path, out var content) ? content.Split(["\r\n", "\n"], StringSplitOptions.None) : [];
     }
 }
 

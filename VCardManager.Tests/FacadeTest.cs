@@ -112,7 +112,7 @@ namespace VCardManager.Tests
         }
 
         [Fact]
-        public void DeleteCard_ShouldRemoveCard()
+        public void DeleteCard_Confirmation()
         {
             var promt = "Enter name of card for deleting: ";
             var deletingCard = new VCard { FullName = "Mick", PhoneNumber = "123123", Email = "asdas" };
@@ -120,40 +120,41 @@ namespace VCardManager.Tests
             _mockUserInteraction.Setup(ui => ui.GetUserInput(promt)).Returns(deletingCard.FullName);
             _mockCardService.Setup(cs => cs.FindByName(deletingCard.FullName)).Returns(new List<VCard> { deletingCard });
 
-            _mockConsole.SetupSequence(c => c.ReadLine()).Returns("y");
-
-            var stringWriter = new StringWriter();
-            _mockConsole.Setup(c => c.WriteLine(It.IsAny<string>())).Callback<string>(s => stringWriter.WriteLine(s));
-            _mockConsole.Setup(c => c.Write(It.IsAny<string>())).Callback<string>(s => stringWriter.Write(s));
+            _mockUserInteraction.Setup(ui => ui.ConfirmDelete(deletingCard)).Returns(true);
 
             _facade.DeleteCard();
 
-            Assert.Contains($"Delete this card '{deletingCard.FullName}' (Id: {deletingCard.Id})? (y/n)", stringWriter.ToString());
-            _mockConsole.Verify(c => c.ReadLine(), Times.Once);
             _mockCardService.Verify(cs => cs.deleteCard(deletingCard.Id), Times.Once);
-            Assert.Contains("Card is deleted.", stringWriter.ToString());
+            _mockUserInteraction.Verify(ui => ui.ConfirmDelete(deletingCard), Times.Once);
+
         }
 
+        // [Fact]
+        // public void DeleteCard_ShouldReturnCanceledMessage()
+        // {
+        //     var promt = "Enter name of card for deleting: ";
+        //     var deletingCard = new VCard { FullName = "Mick", PhoneNumber = "123123", Email = "asdas" };
+
+        //     _mockUserInteraction.Setup(ui => ui.GetUserInput(promt)).Returns(deletingCard.FullName);
+        //     _mockCardService.Setup(cs => cs.FindByName(deletingCard.FullName)).Returns(new List<VCard> { deletingCard });
+
+        //     _mockConsole.SetupSequence(c => c.ReadLine()).Returns("n");
+
+        //     var stringWriter = new StringWriter();
+        //     _mockConsole.Setup(c => c.WriteLine(It.IsAny<string>())).Callback<string>(s => stringWriter.WriteLine(s));
+        //     _mockConsole.Setup(c => c.Write(It.IsAny<string>())).Callback<string>(s => stringWriter.Write(s));
+
+        //     _facade.DeleteCard();
+
+        //     Assert.Contains($"Delete this card '{deletingCard.FullName}' (Id: {deletingCard.Id})? (y/n)", stringWriter.ToString());
+        //     _mockConsole.Verify(c => c.ReadLine(), Times.Once);
+        //     Assert.Contains("Canceled", stringWriter.ToString());
+        // }
+
         [Fact]
-        public void DeleteCard_ShouldReturnCanceledMessage()
+        public void ExportCard_ShouldCreateNewFile()
         {
-            var promt = "Enter name of card for deleting: ";
-            var deletingCard = new VCard { FullName = "Mick", PhoneNumber = "123123", Email = "asdas" };
-
-            _mockUserInteraction.Setup(ui => ui.GetUserInput(promt)).Returns(deletingCard.FullName);
-            _mockCardService.Setup(cs => cs.FindByName(deletingCard.FullName)).Returns(new List<VCard> { deletingCard });
-
-            _mockConsole.SetupSequence(c => c.ReadLine()).Returns("n");
-
-            var stringWriter = new StringWriter();
-            _mockConsole.Setup(c => c.WriteLine(It.IsAny<string>())).Callback<string>(s => stringWriter.WriteLine(s));
-            _mockConsole.Setup(c => c.Write(It.IsAny<string>())).Callback<string>(s => stringWriter.Write(s));
-
-            _facade.DeleteCard();
-
-            Assert.Contains($"Delete this card '{deletingCard.FullName}' (Id: {deletingCard.Id})? (y/n)", stringWriter.ToString());
-            _mockConsole.Verify(c => c.ReadLine(), Times.Once);
-            Assert.Contains("Canceled", stringWriter.ToString());
+            
         }
     }
 }

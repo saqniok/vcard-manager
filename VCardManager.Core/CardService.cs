@@ -7,10 +7,12 @@ namespace VCardManager.Core
                                                                                         //  This ensures that the path to the file remains constant
 
         private readonly IFileStore _fileStore;
+        private readonly CardProperty _cardProperty;
 
-        public CardService(IFileStore fileStore)
+        public CardService(IFileStore fileStore, CardProperty cardProperty)
         {
             _fileStore = fileStore ?? throw new ArgumentNullException(nameof(fileStore));
+            _cardProperty = cardProperty ?? throw new ArgumentNullException(nameof(cardProperty));
         }
 
         public void addCard(VCard card)                                                 // This method adds a new VCard to the repository
@@ -63,24 +65,8 @@ namespace VCardManager.Core
             if (!_fileStore.Exist(_filePath)) return new List<VCard>();             // Checks if the `_filePath` file exists. If not, returns an empty VCard list, 
                                                                                     // preventing read errors
 
-            var allLines = _fileStore.ReadAllText(_filePath)                            // Reads all lines from the _filePath file into an array of strings
-                  .Split(new[] { "\r\n", "\n", "\r" }, StringSplitOptions.None);        // return: A string array containing all lines of the file
-                  
-            // Two lists are initialized: 
-            var cards = new List<VCard>();              // `cards` for storing parsed VCard objects and `chunk` for temporarily storing 
-            var chunk = new List<string>();             // strings belonging to one VCard block (between “BEGIN:VCARD” and “END:VCARD”)
-
-            foreach (var line in allLines)                                  // Iterates over each line read from the file
-            {
-                if (line == "BEGIN:VCARD") chunk = new List<string>();      // If the current string is “BEGIN:VCARD”, this indicates the start of a new VCard. 
-                chunk.Add(line);                                            // chunk is cleared to collect the lines of the new VCard
-
-                if (line == "END:VCARD")                                    // If the current string is “END:VCARD”, it means the end of the current VCard block
-                {
-                    var joined = string.Join('\n', chunk);                  // All strings collected in chunk are concatenated back into a single string, 
-                    cards.Add(VCard.FromVcf(joined));                       // separated by newline characters. This is needed to get a complete vcf block for parsing
-                }
-            }
+            var allLines = _fileStore.ReadAllLines(_filePath);
+            var cards = _cardProperty.parsedCards(allLines);
 
             return cards;       // At the end, the method returns all the collected VCards
         }

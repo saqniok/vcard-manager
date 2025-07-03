@@ -6,6 +6,7 @@ namespace VCardManager.Core
                                                             // This is because the interface only declares the method, but does not implement it
                                                             // The implementation should be provided by the class that implements IFileStore
         string ReadAllText(string path);
+        string[] ReadAllLines(string path);
         void WriteAllText(string path, string content);     // two parameters: `path` for the file path and `content` for the content to be written 
                                                             // This method, overwrites the file if it exists
         void AppendAllText(string path, string content);    // adds `content` to the end of the file if it exists, or creates a new file if it does not exist

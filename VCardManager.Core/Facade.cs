@@ -86,17 +86,8 @@ namespace VCardManager.Core
             if (!isCardExist(card))
                 return;
 
-            _console.WriteLine($"Delete this card '{card.FullName}' (Id: {card.Id})? (y/n)");
-            if (_console.ReadLine()?.ToLower() == "y")
-            {
+            if (_userInteraction.ConfirmDelete(card))
                 _cardService.deleteCard(card.Id);
-                _console.WriteLine("Card is deleted. ");
-            }
-            else
-            {
-                _console.WriteLine("Canceled");
-            }
-
         }
 
         public void ExportCard()

@@ -5,11 +5,12 @@ namespace VCardManager.Core
     */
     public interface IUserInteraction
     {
+        bool ConfirmDelete(VCard card);
         VCard GetContactInfoFromUser();
 
         string GetUserInput(string prompt);
     }
-    
+
     /**
     Calss
     */
@@ -44,6 +45,22 @@ namespace VCardManager.Core
             _console.WriteLine(prompt);
             var name = _console.ReadLine();
             return name;
+        }
+
+        public bool ConfirmDelete(VCard card)
+        {
+            _console.WriteLine($"Delete this card '{card.FullName}' (Id: {card.Id})? (y/n)");
+            var input = _console.ReadLine();
+            var userConfirmed = string.Equals(input, "y", StringComparison.InvariantCultureIgnoreCase);
+            if (userConfirmed)
+            {
+                _console.WriteLine("Card is deleted. ");
+            }
+            else
+            {
+                _console.WriteLine("Canceled");
+            }
+            return userConfirmed;
         }
     }
 }

@@ -5,11 +5,13 @@ public class CardServiceTest
 {
     private readonly InMemoryFileStore _fileStore;
     private readonly CardService _cardService;
+    private readonly CardProperty _cardProperty;
     private readonly string _testFilePath = "data/contacts.vcf";
     public CardServiceTest()
     {
         _fileStore = new InMemoryFileStore();
-        _cardService = new CardService(_fileStore);
+        _cardProperty = new CardProperty();
+        _cardService = new CardService(_fileStore, _cardProperty);
     }
 
     [Fact]
