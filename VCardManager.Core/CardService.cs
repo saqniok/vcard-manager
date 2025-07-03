@@ -1,7 +1,3 @@
-// using System;
-// using System.Collections.Generic;
-// using System.Linq;
-
 namespace VCardManager.Core
 {
     public class CardService : ICardService                                             // Since we inherit the interface, we have to declare each method
