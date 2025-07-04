@@ -109,7 +109,6 @@ namespace VCardManager.Core
                 return;
 
             PrintCard(card);
-
         }
 
         public void ShowAllCards()
@@ -126,9 +125,5 @@ namespace VCardManager.Core
                 _console.WriteLine($"- {card.FullName} (Id: {card.Id})");
         }
 
-        // public void ShowCard()
-        // {
-
-        // }
     }
 }

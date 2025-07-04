@@ -129,21 +129,21 @@ namespace VCardManager.Tests
 
         }
 
-[Fact]
-public void ExportCard_WhenCardExists_ShouldExportAndPrintMessage()
-{
-    var card = new VCard { FullName = "Mick", PhoneNumber = "0432112233", Email = "asdas" };
+        [Fact]
+        public void ExportCard_WhenCardExists_ShouldExportAndPrintMessage()
+        {
+            var card = new VCard { FullName = "Mick", PhoneNumber = "0432112233", Email = "asdas" };
 
-    _mockUserInteraction.Setup(ui => ui.GetUserInput(It.IsAny<string>())).Returns(card.FullName);
-    _mockCardService.Setup(cs => cs.FindByName(card.FullName)).Returns(new List<VCard> { card });
+            _mockUserInteraction.Setup(ui => ui.GetUserInput(It.IsAny<string>())).Returns(card.FullName);
+            _mockCardService.Setup(cs => cs.FindByName(card.FullName)).Returns(new List<VCard> { card });
 
-    var stringWriter = new StringWriter();
-    _mockConsole.Setup(c => c.WriteLine(It.IsAny<string>())).Callback<string>(s => stringWriter.WriteLine(s));
+            var stringWriter = new StringWriter();
+            _mockConsole.Setup(c => c.WriteLine(It.IsAny<string>())).Callback<string>(s => stringWriter.WriteLine(s));
 
-    _facade.ExportCard();
+            _facade.ExportCard();
 
-    _mockCardService.Verify(cs => cs.exportCard(card.Id), Times.Once);
-    Assert.Contains($"Card '{card.FullName}' exported.", stringWriter.ToString());
-}
+            _mockCardService.Verify(cs => cs.exportCard(card.Id), Times.Once);
+            Assert.Contains($"Card '{card.FullName}' exported.", stringWriter.ToString());
+        }
     }
 }
