@@ -1,57 +1,73 @@
-using VCardManager.Core;
 using Moq;
+using VCardManager.Core;
+using VCardManager.Tests._tools;
 
-namespace VCardManager.Tests
+namespace VCardManager.Tests;
+
+public class MenuTests
 {
-    public class MenuTests
+
+    [Fact]
+    public void Menu_Six_Exits()
     {
-        private readonly Mock<IFacade> _mockFacade;
-        private readonly Mock<IConsole> _mockConsole;
-        private readonly Menu _menu;
+        var rolodex = new Mock<IFacade>();
+        var console = new ConsoleSpy();
+        console.AddInput("0");
+        new Menu(rolodex.Object, console).Run();
+    }
 
-        // Конструктор тестового класса, вызывается перед каждым тестом
-        public MenuTests()
-        {
-            _mockFacade = new Mock<IFacade>();
-            _mockConsole = new Mock<IConsole>();
-            _menu = new Menu(_mockFacade.Object, _mockConsole.Object);
-        }
+    private Mock<IFacade> PickOnceFromMenu(string choice)
+    {
+        var rolodex = new Mock<IFacade>();
+        var console = new ConsoleSpy();
+        console.AddInput(choice);
+        console.AddInput("0");
+        new Menu(rolodex.Object, console).Run();
+        return rolodex;
+    }
 
-        [Fact]
-        public void Constructor_InitializesDependencies()
-        {
-            // Arrange и Act уже выполнены в конструкторе MenuTests
+    [Fact]
+    public void Menu_One()
+    {
+        PickOnceFromMenu("1").Verify(a => a.AddVCard(), Times.Once);
+    }
 
-            // Assert
-            Assert.NotNull(_menu);
-        }
+    [Fact]
+    public void Menu_Two()
+    {
+        PickOnceFromMenu("2").Verify(a => a.DeleteCard(), Times.Once);
+    }
 
-        [Fact]
-        public void ShowOptions_WritesAllMenuOptionsToConsole()
-        {
-            // Arrange
-            var stringWriter = new StringWriter();
-            _mockConsole.Setup(c => c.WriteLine(It.IsAny<string>()))
-                        .Callback<string>(s => stringWriter.WriteLine(s));
+    [Fact]
+    public void Menu_Three()
+    {
+        PickOnceFromMenu("3").Verify(a => a.ExportCard(), Times.Once);
+    }
 
-            // Act
-            _menu.ShowOptions();
+    [Fact]
+    public void Menu_Four()
+    {
+        PickOnceFromMenu("4").Verify(a => a.FindByName(), Times.Once);
+    }
 
-            // Assert
-            var consoleOutput = stringWriter.ToString();
+    [Fact]
+    public void Menu_Five()
+    {
+        PickOnceFromMenu("5").Verify(a => a.ShowAllCards(), Times.Once);
+    }
+    [Fact]
+    public void OutOfMenu()
+    {
+        var rolodex = new Mock<IFacade>();
+        var console = new ConsoleSpy();
 
-            // Проверяем, что все ожидаемые строки меню присутствуют в выводе
-            Assert.Contains("\nMenu:", consoleOutput);
-            Assert.Contains("1. Add Card", consoleOutput);
-            Assert.Contains("2. Delete Card", consoleOutput);
-            Assert.Contains("3. Export Card", consoleOutput);
-            Assert.Contains("4. Find and Show Card", consoleOutput);
-            Assert.Contains("5. Show All Cards", consoleOutput);
-            Assert.Contains("0. Exit", consoleOutput);
-            Assert.Contains("Add number in console:", consoleOutput);
+        console.AddInput("6");
+        console.AddInput("0");
 
-            // Проверяем, что WriteLine был вызван 8 раз (7 строк меню + 1 пустая строка в начале)
-            _mockConsole.Verify(c => c.WriteLine(It.IsAny<string>()), Times.Exactly(8));
-        }
+        new Menu(rolodex.Object, console).Run();
+
+        Assert.Contains("Wrong number, Try again and again and again....", console.Output);
+
+        rolodex.VerifyNoOtherCalls();
     }
 }

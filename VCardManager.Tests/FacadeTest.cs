@@ -129,32 +129,21 @@ namespace VCardManager.Tests
 
         }
 
-        // [Fact]
-        // public void DeleteCard_ShouldReturnCanceledMessage()
-        // {
-        //     var promt = "Enter name of card for deleting: ";
-        //     var deletingCard = new VCard { FullName = "Mick", PhoneNumber = "123123", Email = "asdas" };
+[Fact]
+public void ExportCard_WhenCardExists_ShouldExportAndPrintMessage()
+{
+    var card = new VCard { FullName = "Mick", PhoneNumber = "0432112233", Email = "asdas" };
 
-        //     _mockUserInteraction.Setup(ui => ui.GetUserInput(promt)).Returns(deletingCard.FullName);
-        //     _mockCardService.Setup(cs => cs.FindByName(deletingCard.FullName)).Returns(new List<VCard> { deletingCard });
+    _mockUserInteraction.Setup(ui => ui.GetUserInput(It.IsAny<string>())).Returns(card.FullName);
+    _mockCardService.Setup(cs => cs.FindByName(card.FullName)).Returns(new List<VCard> { card });
 
-        //     _mockConsole.SetupSequence(c => c.ReadLine()).Returns("n");
+    var stringWriter = new StringWriter();
+    _mockConsole.Setup(c => c.WriteLine(It.IsAny<string>())).Callback<string>(s => stringWriter.WriteLine(s));
 
-        //     var stringWriter = new StringWriter();
-        //     _mockConsole.Setup(c => c.WriteLine(It.IsAny<string>())).Callback<string>(s => stringWriter.WriteLine(s));
-        //     _mockConsole.Setup(c => c.Write(It.IsAny<string>())).Callback<string>(s => stringWriter.Write(s));
+    _facade.ExportCard();
 
-        //     _facade.DeleteCard();
-
-        //     Assert.Contains($"Delete this card '{deletingCard.FullName}' (Id: {deletingCard.Id})? (y/n)", stringWriter.ToString());
-        //     _mockConsole.Verify(c => c.ReadLine(), Times.Once);
-        //     Assert.Contains("Canceled", stringWriter.ToString());
-        // }
-
-        [Fact]
-        public void ExportCard_ShouldCreateNewFile()
-        {
-            
-        }
+    _mockCardService.Verify(cs => cs.exportCard(card.Id), Times.Once);
+    Assert.Contains($"Card '{card.FullName}' exported.", stringWriter.ToString());
+}
     }
 }
