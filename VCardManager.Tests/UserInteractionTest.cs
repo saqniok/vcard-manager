@@ -103,6 +103,15 @@ namespace VCardManager.Tests
             _mockConsole.Verify(c => c.ReadLine(), Times.Once);
             Assert.Contains(expectedOutputMessage, stringWriter.ToString());
         }
+
+        [Fact]
+        public void ValidNumbers_Should_MatchPattern()
+        {
+            Assert.True(UserInteraction.IsValidPhoneNumber("0487112233"));
+            Assert.True(UserInteraction.IsValidPhoneNumber("0487/11.22.33"));
+            Assert.False(UserInteraction.IsValidPhoneNumber("abc/11.22.33"));
+        }
     }
 }
+
 

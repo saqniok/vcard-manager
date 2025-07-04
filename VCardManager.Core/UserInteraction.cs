@@ -31,14 +31,15 @@ namespace VCardManager.Core
         {
             string name = GetUserInput("Add name: ");
             string phone;
-            do
+            while (true)
             {
                 phone = GetUserInput("Add Phone Number: ");
 
-                if (!IsValidPhoneNumber(phone))
-                    Console.WriteLine("Invalid phone number format. Please try again.");
+                if (IsValidPhoneNumber(phone))
+                    break;
 
-            } while (!IsValidPhoneNumber(phone));
+                Console.WriteLine("Invalid phone number format. Please try again.");
+            }
 
             string email = GetUserInput("Add email: ");
 
