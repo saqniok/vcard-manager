@@ -8,7 +8,7 @@ namespace VCardManager.Core
         void DeleteCard();          // void return type: All methods return void, which implies 
                                     // that they perform an action, but do not return a specific value directly to the calling code
         void ExportCard();          //
-        void ShowCard();            //
+        //void ShowCard();            //
         void ShowAllCards();        //
         void FindByName();          //
     }

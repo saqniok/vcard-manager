@@ -126,9 +126,9 @@ namespace VCardManager.Core
                 _console.WriteLine($"- {card.FullName} (Id: {card.Id})");
         }
 
-        public void ShowCard()
-        {
+        // public void ShowCard()
+        // {
 
-        }
+        // }
     }
 }

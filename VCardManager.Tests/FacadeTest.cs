@@ -53,7 +53,7 @@ namespace VCardManager.Tests
         {
             var prompt = "Enter name:";
             var userName = "Pikachu";
-            var expectedCard = new VCard { FullName = userName, PhoneNumber = "123123", Email = "asdas" };
+            var expectedCard = new VCard { FullName = userName, PhoneNumber = "0432112233", Email = "asdas" };
             _mockUserInteraction.Setup(ui => ui.GetUserInput(prompt)).Returns(userName);
             _mockCardService.Setup(cs => cs.FindByName(userName)).Returns(new List<VCard> { expectedCard });
 
@@ -72,8 +72,8 @@ namespace VCardManager.Tests
             var prompt = "Enter name:";
             var userName = "Dick";
 
-            var card1 = new VCard { FullName = "Dick", PhoneNumber = "123123", Email = "asdas" };
-            var card2 = new VCard { FullName = "Dickenson", PhoneNumber = "123123", Email = "asdas" };
+            var card1 = new VCard { FullName = "Dick", PhoneNumber = "0432112233", Email = "asdas" };
+            var card2 = new VCard { FullName = "Dickenson", PhoneNumber = "0432112233", Email = "asdas" };
 
             _mockUserInteraction.Setup(ui => ui.GetUserInput(prompt)).Returns(userName);
             _mockCardService.Setup(cs => cs.FindByName(userName)).Returns(new List<VCard> { card1, card2 });
@@ -90,7 +90,7 @@ namespace VCardManager.Tests
             Assert.NotNull(result);
             Assert.Equal(card1, result);
             Assert.Contains("Find more Cards:", stringWriter.ToString());
-            Assert.Contains("1. Dick, TEL: 123123, EMAIL: asdas", stringWriter.ToString());
+            Assert.Contains("1. Dick, TEL: 0432112233, EMAIL: asdas", stringWriter.ToString());
             Assert.Contains("Add Card number:", stringWriter.ToString());
             _mockConsole.Verify(c => c.ReadLine(), Times.Once);
         }
@@ -98,7 +98,7 @@ namespace VCardManager.Tests
         [Fact]
         public void AddVCard_CallsGetContactInfoAndAddCard()
         {
-            var card = new VCard { FullName = "Dick", PhoneNumber = "123123", Email = "asdas" };
+            var card = new VCard { FullName = "Dick", PhoneNumber = "0432112233", Email = "asdas" };
             _mockUserInteraction.Setup(ui => ui.GetContactInfoFromUser()).Returns(card);
 
             var stringWriter = new StringWriter();
@@ -115,7 +115,7 @@ namespace VCardManager.Tests
         public void DeleteCard_Confirmation()
         {
             var promt = "Enter name of card for deleting: ";
-            var deletingCard = new VCard { FullName = "Mick", PhoneNumber = "123123", Email = "asdas" };
+            var deletingCard = new VCard { FullName = "Mick", PhoneNumber = "0432112233", Email = "asdas" };
 
             _mockUserInteraction.Setup(ui => ui.GetUserInput(promt)).Returns(deletingCard.FullName);
             _mockCardService.Setup(cs => cs.FindByName(deletingCard.FullName)).Returns(new List<VCard> { deletingCard });

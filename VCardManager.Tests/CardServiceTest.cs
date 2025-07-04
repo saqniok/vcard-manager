@@ -49,9 +49,9 @@ public class CardServiceTest
     [Fact]
     public void DeleteCard_ShouldRemoveCardFromFile()
     {
-        var card1 = new VCard { Id = Guid.NewGuid(), FullName = "Mimi", PhoneNumber = "1111", Email = "mimi@example.com" };
-        var card2 = new VCard { Id = Guid.NewGuid(), FullName = "Bibi", PhoneNumber = "2222", Email = "bibi@example.com" };
-        var card3 = new VCard { Id = Guid.NewGuid(), FullName = "Kuku", PhoneNumber = "3333", Email = "kuku@example.com" };
+        var card1 = new VCard { Id = Guid.NewGuid(), FullName = "Mimi", PhoneNumber = "0432112233", Email = "mimi@example.com" };
+        var card2 = new VCard { Id = Guid.NewGuid(), FullName = "Bibi", PhoneNumber = "0432112233", Email = "bibi@example.com" };
+        var card3 = new VCard { Id = Guid.NewGuid(), FullName = "Kuku", PhoneNumber = "0432112233", Email = "kuku@example.com" };
 
         _cardService.addCard(card1);
         _cardService.addCard(card2);
@@ -85,8 +85,8 @@ public class CardServiceTest
     [Fact]
     public void GetAllCards_ShouldReturnAllCards_WhenFileExists()
     {
-        var card1 = new VCard { Id = Guid.NewGuid(), FullName = "First", PhoneNumber = "111", Email = "first@example.com" };
-        var card2 = new VCard { Id = Guid.NewGuid(), FullName = "Second", PhoneNumber = "222", Email = "second@example.com" };
+        var card1 = new VCard { Id = Guid.NewGuid(), FullName = "First", PhoneNumber = "0432112233", Email = "first@example.com" };
+        var card2 = new VCard { Id = Guid.NewGuid(), FullName = "Second", PhoneNumber = "0432112233", Email = "second@example.com" };
 
         _cardService.addCard(card1);
         _cardService.addCard(card2);
@@ -102,8 +102,8 @@ public class CardServiceTest
     [Fact]
     public void ExportCard_ShouldCreateNewFile_WithContanctInfo()
     {
-        var card1 = new VCard { Id = Guid.NewGuid(), FullName = "James", PhoneNumber = "00", Email = "James@example.com" };
-        var card2 = new VCard { Id = Guid.NewGuid(), FullName = "Bond", PhoneNumber = "007", Email = "bond@example.com" };
+        var card1 = new VCard { Id = Guid.NewGuid(), FullName = "James", PhoneNumber = "0432112233", Email = "James@example.com" };
+        var card2 = new VCard { Id = Guid.NewGuid(), FullName = "Bond", PhoneNumber = "0432112233", Email = "bond@example.com" };
 
         _cardService.addCard(card1);
         _cardService.addCard(card2);
@@ -124,9 +124,9 @@ public class CardServiceTest
     [Fact]
     public void FindByName_ShoulBeReturnMatchingCards()
     {
-        var card1 = new VCard { Id = Guid.NewGuid(), FullName = "Balck", PhoneNumber = "25", Email = "black@example.com" };
-        var card2 = new VCard { Id = Guid.NewGuid(), FullName = "Dick", PhoneNumber = "00", Email = "dick@example.com" };
-        var card3 = new VCard { Id = Guid.NewGuid(), FullName = "Dickenson", PhoneNumber = "25", Email = "valey@example.com" };
+        var card1 = new VCard { Id = Guid.NewGuid(), FullName = "Balck", PhoneNumber = "0432112233", Email = "black@example.com" };
+        var card2 = new VCard { Id = Guid.NewGuid(), FullName = "Dick", PhoneNumber = "0432112233", Email = "dick@example.com" };
+        var card3 = new VCard { Id = Guid.NewGuid(), FullName = "Dickenson", PhoneNumber = "0432112233", Email = "valey@example.com" };
 
         _cardService.addCard(card1);
         _cardService.addCard(card2);

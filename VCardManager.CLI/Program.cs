@@ -7,19 +7,36 @@
 
 using VCardManager.CLI;
 using VCardManager.Core;
+using Microsoft.Extensions.DependencyInjection;
+
 
 class Program
 {
   static void Main(string[] args)
   {
-    IFileStore fileStore = new FileSystemStore();
-    CardProperty cardProperty = new CardProperty();
-    ICardService cardService = new CardService(fileStore, cardProperty);
-    IConsole console = new SystemConsole();
-    IUserInteraction userInteraction = new UserInteraction(console);
-    IFacade facade = new Facade(cardService, console, userInteraction);
+    var serviceProvider = new ServiceCollection()               // AddSingleton: make 1 example for 1 life circle
+        .AddSingleton<IFileStore, FileSystemStore>()
+        .AddSingleton<CardProperty>()
+        .AddSingleton<ICardService, CardService>()
+        .AddSingleton<IConsole, SystemConsole>()
+        .AddSingleton<IUserInteraction, UserInteraction>()
+        .AddSingleton<IFacade, Facade>()
+        .AddSingleton<Menu>()
+        .BuildServiceProvider();
 
-    var menu = new Menu(facade, console);
-    menu.Run();
+    using (serviceProvider)
+    {
+      try
+      {
+        var menu = serviceProvider.GetRequiredService<Menu>();
+        menu.Run();
+      }
+      catch (Exception ex)
+      {
+        Console.WriteLine($"An error occurred: {ex.Message}");
+        Console.WriteLine(ex.StackTrace);
+      }
+    }
   }
 }
+

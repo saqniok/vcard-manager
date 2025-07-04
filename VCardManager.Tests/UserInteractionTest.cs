@@ -44,7 +44,7 @@ namespace VCardManager.Tests
         public void GetContactInfoFromUser_PromtForInfoAndReturnVCard()
         {
             var expectName = "PiPi";
-            var expectPhone = "123123";
+            var expectPhone = "0432112233";
             var expectEmail = "jonee@email";
 
             _mockConsole.SetupSequence(c => c.ReadLine())
@@ -84,7 +84,7 @@ namespace VCardManager.Tests
         [InlineData("anything", false, "Canceled")]
         public void ConfirmDelete_HandlesUserConfirmationCorrectly(string userInput, bool expectedResult, string expectedOutputMessage)
         {
-            var card = new VCard { FullName = "Test Card", PhoneNumber = "111", Email = "test@example.com" };
+            var card = new VCard { FullName = "Test Card", PhoneNumber = "0432112233", Email = "test@example.com" };
             var expectedPrompt = $"Delete this card '{card.FullName}' (Id: {card.Id})? (y/n)";
 
             _mockConsole.Setup(c => c.ReadLine()).Returns(userInput);
