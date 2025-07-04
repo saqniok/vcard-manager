@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace VCardManager.Core
 {
     /**
@@ -28,7 +30,16 @@ namespace VCardManager.Core
         public VCard GetContactInfoFromUser()
         {
             string name = GetUserInput("Add name: ");
-            string phone = GetUserInput("Add Phone Number: ");
+            string phone;
+            do
+            {
+                phone = GetUserInput("Add Phone Number: ");
+
+                if (!IsValidPhoneNumber(phone))
+                    Console.WriteLine("Invalid phone number format. Please try again.");
+
+            } while (!IsValidPhoneNumber(phone));
+
             string email = GetUserInput("Add email: ");
 
             var card = new VCard                                    // A new instance of VCard class is created
@@ -61,6 +72,29 @@ namespace VCardManager.Core
                 _console.WriteLine("Canceled");
             }
             return userConfirmed;
+        }
+
+        public static bool IsValidPhoneNumber(string input)
+        {
+            var pattern = @"^0?\d{3,4}([/\. ]?\d{2}){3}$";
+            return Regex.IsMatch(input, pattern);
+            /**
+                    @"^0?487([/\. ]?\d{2}){3}$" explanation
+
+                    `@`     begore " verbatim string literal, it's convert double \\ to \, C# interprets all characters within a string literally
+
+                    `^`     Begin of the string. This means that the pattern must match the very beginning of the input string
+
+                    0?      Means that `0` is optional. May or may not be
+
+                    \d{3,4} Means any 3 or 4 numbers
+
+                    ([/\. ]?\d{2})   Optional sign can be added like /\. and " ", after that must be 2 digits
+
+                    {3}     Means 3 times, what is in scopes
+
+                    $       End ofthe regEx
+            */
         }
     }
 }
