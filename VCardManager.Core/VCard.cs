@@ -14,6 +14,8 @@ public class VCard
     public string PhoneNumber { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
 
+    public string ToVcf() => ToString();
+
     public override string ToString()                      //   `override` indicates that this method overrides the ToString() method 
     {                                                      //   from the object base class (from which all classes in C# implicitly inherit). 
         return $"BEGIN:VCARD\n" +                          //   The standard ToString() normally returns a type name. Here, however, 
